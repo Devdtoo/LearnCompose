@@ -6,6 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -35,87 +39,33 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            Column(modifier = Modifier.fillMaxSize()) {
-                val scaffoldState = rememberScaffoldState()
-                var textFieldState by remember{ mutableStateOf("")}
-                val scope = rememberCoroutineScope()
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    scaffoldState = scaffoldState
-                    ) {
-                        Column(
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center,
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(horizontal = 30.dp)
-                        ) {
-                            TextField(
-                                value = textFieldState,
-                                label = {
-                                    Text("Enter your name")
-                                },
-                                onValueChange = {
-                                    textFieldState = it
-                                },
-                                singleLine = true,
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Button(onClick = {
-                                scope.launch {
-                                    scaffoldState.snackbarHostState.showSnackbar("Hello $textFieldState")
-                                }
-                            }) {
-                                Text(text = "Please greet me")
-                            }
-                        }
-                }
-                Snackbar(modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                
 
-                ) {
-                    Text(text = "Hello")
+            LazyColumn{
+                itemsIndexed(
+                    listOf("This", "is", "Jetpack", "Compose")
+                ){ index, string ->
+                    Text(
+                        text = string,
+                        fontSize = 25.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 24.dp)
+                    )
                 }
+                /*items(5000) {
+                    Text(
+                        text = "Item $it",
+                        fontSize = 25.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 24.dp)
+                    )
+                }*/
             }
-
-
         }
     }
 }
-
-@Composable
-fun ColorBox(modifier: Modifier = Modifier,
-             updateColor: (Color) -> Unit
-) {
-    Box(modifier = modifier
-        .background(Color.Red)
-        .clickable {
-            updateColor(
-                Color(
-                    Random.nextFloat(),
-                    Random.nextFloat(),
-                    Random.nextFloat(),
-                    1f
-                )
-            )
-        }
-    )
-}
-
-
-
-/*
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color(0xFF101010))
-    )
-    LearnComposeTheme {
-//        Greeting("Dev")
-    }
-}*/
